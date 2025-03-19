@@ -73,6 +73,44 @@ function selectClass(className) {
     document.querySelector('.class-select').remove();
     applyClassBonuses();
 }
+// Save game
+function saveGame() {
+    localStorage.setItem('gameSave', JSON.stringify(player));
+}
 
+// Load game
+function loadGame() {
+    const save = localStorage.getItem('gameSave');
+    if(save) Object.assign(player, JSON.parse(save));
+}
+
+// Add to init()
+window.onload = () => {
+    loadGame();
+    init(); 
+};
 ;
+
+// Add to game.js
+function attack(enemy) {
+    const baseDamage = 10;
+    let damage = baseDamage;
+    
+    if(player.class === 'swordmaster') damage *= 1.5;
+    if(player.class === 'necromancer') summonMinion();
+    
+    enemy.health -= damage;
+    if(enemy.health <= 0) defeatEnemy(enemy);
+}
+
+const audio = new Audio('sfx/sword-slash.mp3');
+   function playSound() {
+       audio.currentTime = 0;
+       audio.play();
+   }
+const gameMap = [
+       [1,1,1,0,0],
+       [1,0,1,1,0],
+       [0,0,0,1,1]
+   ];
 }
